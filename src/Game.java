@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.Random;
 
 public class Game extends JPanel  implements ActionListener {
@@ -26,6 +25,8 @@ public class Game extends JPanel  implements ActionListener {
         setBackground(Color.BLACK);
         loadImages();
         initGame();
+        addKeyListener(new FieldKeyListener());
+        setFocusable(true);
     }
 
     public void initGame(){
@@ -60,6 +61,10 @@ public class Game extends JPanel  implements ActionListener {
             for (int i=0; i<dots; i++){
                 g.drawImage(dot,x[i],y[i],this);
             }
+        } else {
+            String string = "Game Over, крошка";
+            g.setColor(Color.WHITE);
+            g.drawString(string,95,SIZE/2);
         }
     }
 
@@ -108,5 +113,33 @@ public class Game extends JPanel  implements ActionListener {
             checkApple();
         }
         repaint();
+    }
+
+    class FieldKeyListener extends KeyAdapter {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            super.keyPressed(e);
+            int key = e.getKeyCode();
+            if (key == KeyEvent.VK_LEFT && ! right){
+                left = true;
+                up = false;
+                down = false;
+            }
+            if (key == KeyEvent.VK_RIGHT && ! left){
+                right = true;
+                up = false;
+                down = false;
+            }
+            if (key == KeyEvent.VK_UP && !down){
+                right = false;
+                up = true;
+                left = false;
+            }
+            if (key == KeyEvent.VK_DOWN && !up){
+                right = false;
+                down = true;
+                left = false;
+            }
+        }
     }
 }
